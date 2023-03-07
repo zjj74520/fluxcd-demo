@@ -43,7 +43,7 @@ resource "kubernetes_service" "test" {
   }
   spec {
     selector = {
-      app = kubernetes_deployment.test.spec.template.metadata.labels.app
+      app = kubernetes_deployment.test.spec[0].template.metadata.labels.app
     }
     type = "NodePort"
     port {

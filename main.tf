@@ -1,38 +1,65 @@
 terraform {
-  required_version = ">= 0.12.26"
-}
-
-variable "subject" {
-   type = string
-   default = "World"
-   description = "Subject to hello"
-}
-
-output "hello_world" {
-  value = "Hello, ${var.subject}!"
-}
-
-terraform {
   required_providers {
     kubernetes = {
-      source = "hashicorp/kubernetes"
-      version = "2.18.1"
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0.0"
     }
   }
 }
-
 provider "kubernetes" {
-  config_path   = "/etc/kubernetes/admin.conf"
-  host                   = azurerm_kubernetes_cluster.aks.kube_admin_config.0.host
-  client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_certificate)
-  client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_key)
-  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_admin_config.0.cluster_ca_certificate)
+  config_path = "~/.kube/config"
 }
-resource "kubernetes_namespace" "nginx-test" {
+resource "kubernetes_namespace" "test" {
   metadata {
     name = "nginx"
   }
 }
-
+resource "kubernetes_deployment" "test" {
+  metadata {
+    name      = "nginx"
+    namespace = kubernetes_namespace.test.metadata.0.name
+  }
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        app = "MyTestApp"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "MyTestApp"
+        }
+      }
+      spec {
+        container {
+          image = "nginx"
+          name  = "nginx-container"
+          port {
+            container_port = 80
+          }
+        }
+      }
+    }
+  }
+}
+resource "kubernetes_service" "test" {
+  metadata {
+    name      = "nginx"
+    namespace = kubernetes_namespace.test.metadata.0.name
+  }
+  spec {
+    selector = {
+      app = kubernetes_deployment.test.spec.0.template.0.metadata.0.labels.app
+    }
+    type = "NodePort"
+    port {
+      node_port   = 30201
+      port        = 80
+      target_port = 80
+    }
+  }
+}
 
 

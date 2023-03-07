@@ -8,8 +8,9 @@ terraform {
 }
 provider "kubernetes" {
   host = "https://localhost:6443"
-  config_path = "~/.kube/config"
-  config_context = "kubernetes-admin@kubernetes"
+  client_certificate     = file("~/.kube/client-cert.pem")
+  client_key             = file("~/.kube/client-key.pem")
+  cluster_ca_certificate = file("~/.kube/cluster-ca-cert.pem")
 }
 resource "kubernetes_namespace" "test" {
   metadata {

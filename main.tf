@@ -7,7 +7,12 @@ terraform {
   }
 }
 provider "kubernetes" {
-  config_path = "/root/.kube/config"
+  host = "https://104.196.242.174"
+
+  client_certificate     = "${file("~/.kube/client-cert.pem")}"
+  client_key             = "${file("~/.kube/client-key.pem")}"
+  cluster_ca_certificate = "${file("~/.kube/cluster-ca-cert.pem")}"
+  config_path = "~/.kube/config"
 }
 resource "kubernetes_namespace" "test" {
   metadata {

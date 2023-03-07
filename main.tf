@@ -7,7 +7,7 @@ terraform {
   }
 }
 provider "kubernetes" {
-  host = "https://104.196.242.174"
+  host = "https://192.168.189.3"
 
   client_certificate     = "${file("~/.kube/client-cert.pem")}"
   client_key             = "${file("~/.kube/client-key.pem")}"

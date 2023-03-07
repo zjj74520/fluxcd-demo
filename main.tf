@@ -7,7 +7,7 @@ terraform {
   }
 }
 provider "kubernetes" {
-  host = "https://192.168.189.3:6443"
+  host = "https://localhost:6443"
   config_path = "~/.kube/config"
   config_context = "kubernetes-admin@kubernetes"
 }

@@ -11,6 +11,16 @@ variable "subject" {
 output "hello_world" {
   value = "Hello, ${var.subject}!"
 }
+
+terraform {
+  required_providers {
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "2.18.1"
+    }
+  }
+}
+
 provider "kubernetes" {
   config_path   = "/etc/kubernetes/admin.conf"
 }

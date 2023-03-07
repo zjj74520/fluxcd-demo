@@ -10,16 +10,50 @@ provider "kubernetes" {
   host = "https://192.168.189.3:6443"
   config_path = "~/.kube/config"
 }
-terraform {
-  required_version = ">= 0.12.26"
+resource "kubernetes_deployment" "test" {
+  metadata {
+    name      = "nginx"
+    namespace = "flux-system"
+  }
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        app = "MyTestApp"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "MyTestApp"
+        }
+      }
+      spec {
+        container {
+          image = "nginx"
+          name  = "nginx-container"
+          port {
+            container_port = 80
+          }
+        }
+      }
+    }
+  }
 }
-
-variable "subject" {
-   type = string
-   default = "World"
-   description = "Subject to hello"
-}
-
-output "hello_world" {
-  value = "Hello, ${var.subject}!"
+resource "kubernetes_service" "test" {
+  metadata {
+    name      = "nginx"
+    namespace = "flux-system"
+  }
+  spec {
+    selector = {
+      app = kubernetes_deployment.test.spec.0.template.0.metadata.0.labels.app
+    }
+    type = "NodePort"
+    port {
+      node_port   = 30201
+      port        = 80
+      target_port = 80
+    }
+  }
 }

@@ -1,19 +1,15 @@
-terraform {
-  required_providers {
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = ">= 2.0.0"
-    }
-  }
-}
 provider "kubernetes" {
-  host = "https://192.168.189.3:6443"
-  config_path = "~/.kube/config"
+  config_path   = "/etc/kubernetes/admin.conf"
+}
+resource "kubernetes_namespace" "test" {
+  metadata {
+    name = "mynginx1"
+  }
 }
 resource "kubernetes_deployment" "test" {
   metadata {
     name      = "nginx"
-    namespace = "flux-system"
+    namespace = kubernetes_namespace.test.metadata.name
   }
   spec {
     replicas = 2
@@ -43,11 +39,11 @@ resource "kubernetes_deployment" "test" {
 resource "kubernetes_service" "test" {
   metadata {
     name      = "nginx"
-    namespace = "flux-system"
+    namespace = kubernetes_namespace.test.metadata.name
   }
   spec {
     selector = {
-      app = kubernetes_deployment.test.spec.0.template.0.metadata.0.labels.app
+      app = kubernetes_deployment.test.spec.template.metadata.labels.app
     }
     type = "NodePort"
     port {
@@ -57,3 +53,4 @@ resource "kubernetes_service" "test" {
     }
   }
 }
+

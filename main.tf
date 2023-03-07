@@ -11,3 +11,11 @@ variable "subject" {
 output "hello_world" {
   value = "Hello, ${var.subject}!"
 }
+provider "kubernetes" {
+  config_path   = "/etc/kubernetes/admin.conf"
+}
+resource "kubernetes_namespace" "nginx-test" {
+  metadata {
+    name = "nginx"
+  }
+}

@@ -22,7 +22,7 @@ resource "kubernetes_namespace" "test" {
 }
 resource "kubernetes_deployment" "test" {
   metadata {
-    name      = "svn"
+    name      = "nginx"
     namespace = kubernetes_namespace.test.metadata[0].name
   }
   spec {
@@ -40,7 +40,7 @@ resource "kubernetes_deployment" "test" {
       }
       spec {
         container {
-          image = "witersencom/svnadmin:2.5.3"
+          image = "nginx"
           name  = "nginx-container123132"
           port {
             container_port = 80
@@ -52,7 +52,7 @@ resource "kubernetes_deployment" "test" {
 }
 resource "kubernetes_service" "test" {
   metadata {
-    name      = "svn"
+    name      = "nginx"
     namespace = kubernetes_namespace.test.metadata[0].name
   }
   spec {

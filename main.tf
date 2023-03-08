@@ -40,7 +40,7 @@ resource "kubernetes_deployment" "test" {
       }
       spec {
         container {
-          image = "witersencom/svnadmin:2.5.2"
+          image = "witersencom/svnadmin:2.5.3"
           name  = "nginx-container123132"
           port {
             container_port = 80

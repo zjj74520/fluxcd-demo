@@ -22,7 +22,7 @@ resource "kubernetes_namespace" "test" {
 }
 resource "kubernetes_deployment" "test" {
   metadata {
-    name      = "nginx"
+    name      = "svn"
     namespace = kubernetes_namespace.test.metadata[0].name
   }
   spec {

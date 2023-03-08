@@ -13,7 +13,7 @@ resource "kubernetes_namespace" "test" {
 resource "kubernetes_deployment" "test" {
   metadata {
     name      = "nginx"
-    namespace = kubernetes_namespace.test.metadata[0].name
+    namespace = kubernetes_namespace.test.metadata.name
   }
   spec {
     replicas = 2
@@ -43,11 +43,11 @@ resource "kubernetes_deployment" "test" {
 resource "kubernetes_service" "test" {
   metadata {
     name      = "nginx"
-    namespace = kubernetes_namespace.test.metadata[0].name
+    namespace = kubernetes_namespace.test.metadata.name
   }
   spec {
     selector = {
-      app = kubernetes_deployment.test.spec[0].template[0].metadata[0].labels.app
+      app = kubernetes_deployment.test.spec.template.metadata.labels.app
     }
     type = "NodePort"
     port {

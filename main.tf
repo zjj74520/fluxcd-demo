@@ -17,7 +17,7 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "test" {
   metadata {
-    name = "mynginx12"
+    name = "mynginx12345"
   }
 }
 resource "kubernetes_deployment" "test" {

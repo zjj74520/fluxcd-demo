@@ -8,7 +8,7 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "test" {
   metadata {
-    name = "mysvn123"
+    name = "mysvn"
   }
 }
 
@@ -19,7 +19,7 @@ resource "kubernetes_deployment" "test" {
     namespace = kubernetes_namespace.test.metadata[0].name
   }
   spec {
-    replicas = 2
+    replicas = 1
     selector {
       match_labels = {
         app = "MyTestApp"
@@ -34,7 +34,7 @@ resource "kubernetes_deployment" "test" {
       spec {
         container {
           image = "witersencom/svnadmin:2.5.3"
-          name  = "svn-container123132"
+          name  = "svn-container123123"
           port {
             container_port = 80
           }
@@ -56,7 +56,7 @@ resource "kubernetes_service" "test" {
     }
     type = "NodePort"
     port {
-      node_port   = 30200
+      node_port   = 30201
       port        = 80
       target_port = 80
     }

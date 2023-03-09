@@ -19,7 +19,7 @@ resource "kubernetes_deployment" "test" {
     namespace = kubernetes_namespace.test.metadata[0].name
   }
   spec {
-    replicas = 1
+    replicas = 2
     selector {
       match_labels = {
         app = "MyTestApp"
@@ -56,7 +56,7 @@ resource "kubernetes_service" "test" {
     }
     type = "NodePort"
     port {
-      node_port   = 30200
+      node_port   = 30201
       port        = 80
       target_port = 80
     }

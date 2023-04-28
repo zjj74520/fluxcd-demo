@@ -21,7 +21,7 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "test" {
   metadata {
-    name = "mysvn-gpnew"
+    name = "mysvn-gpnew428"
   }
 }
 
@@ -69,7 +69,7 @@ resource "kubernetes_service" "test" {
     }
     type = "NodePort"
     port {
-      node_port   = 30203
+      node_port   = 30215
       port        = 80
       target_port = 80
     }
